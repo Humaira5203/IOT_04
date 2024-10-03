@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>x.509 Certificate Management</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height : 100vh;
+      margin: 0;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom : 20px;
+    }
+    .hollow-box {
+      border: 2px solid #000;
+      border-radius: 10px;
+      padding: 20px;
+      width : 400px;
+      text-align: center;
+      margin-bottom : 20px;
+    }
+    .form-group {
+      margin-bottom : 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom : 5px;
+    }
+    .form-group input {
+      width : 90%; /* Adjust the width to 90% of the box */
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #000;
+      text-align: center; /* Center text inside the input box */
+    }
+    .action-button {
+      margin: 10px 0;
+      padding: 10px 20px;
+      border: 2px solid #000;
+      border-radius: 5px;
+      background: none;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background-color 0.3s, color 0.3s;
+      text-align: center;
+      width : 200px;
+    }
+    .action-button:hover {
+      background-color: rgb(2, 2, 94);
+      color: white;
+    }
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top : 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="hollow-box">
+    <h1>Certificate Management</h1>
+    <form action="/manage-certificates" method="POST">
+      <div class="form-group">
+        <label for="device-id">Enter Device ID:</label>
+        <input type="text" id="device-id" name="deviceId" required>
+      </div>
+      <div class="button-container">
+        <button type="submit" name="action" value="create" class="action-button">Create</button>
+        <button type="submit" name="action" value="delete" class="action-button">Delete</button>
+        <button type="submit" name="action" value="download" class="action-button">Download</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

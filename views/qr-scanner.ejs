@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code Scanner</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height : 100vh;
+      margin: 0;
+    }
+    .hollow-box {
+      border: 2px solid #000;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      width : 500px;
+    }
+    .form-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .upload-button {
+      margin-top : 10px;
+      padding: 10px 20px;
+      border: 2px solid #000;
+      border-radius: 5px;
+      background-color: #007BFF;
+      color: white;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .upload-button:hover {
+      background-color: #0056b3;
+    }
+    #qrInp {
+      display: none; /* Hide the default file input */
+    }
+    #qr-file-chosen {
+      margin-top : 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="hollow-box">
+    <h2>QR Code Scanner</h2>
+    <input accept="image/*" type="file" id="qrInp" name="qr-file">
+    <label for="qrInp" class="upload-button">Choose File</label>
+    <div id="qr-file-chosen">No file chosen</div>
+  </div>
+
+  <!-- Include jsQR library -->
+  <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.min.js"></script>
+  
+  <script>
+    const qrInp = document.getElementById('qrInp');
+    const qrFileChosen = document.getElementById('qr-file-chosen');
+
+    // Check if the file was passed from the upload page
+    const urlParams = new URLSearchParams(window.location.search);
+    const uploadedFile = urlParams.get('file');
+
+    if (uploadedFile) {
+      qrFileChosen.textContent = uploadedFile;
+      qrInp.value = `/uploads/${uploadedFile}`; // Pre-fill the input with the uploaded file path
+
+      // Automatically read the QR code
+      readQRCodeFromImage(`/uploads/${uploadedFile}`);
+    }
+
+    qrInp.onchange = function(evt) {
+      const [file] = qrInp.files;
+      if (file) {
+        qrFileChosen.textContent = file.name;
+        readQRCodeFromImage(file);
+      } else {
+        qrFileChosen.textContent = 'No file chosen';
+      }
+    };
+
+    function readQRCodeFromImage(file) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        const imageData = reader.result;
+        const img = new Image();
+        img.src = imageData;
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const context = canvas.getContext('2d');
+          context.drawImage(img, 0, 0);
+          const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+          const qrCode = jsQR(imageData.data, canvas.width, canvas.height);
+          if (qrCode) {
+            alert("QR Code Data: " + qrCode.data);
+          } else {
+            alert("No QR code found.");
+          }
+        };
+      };
+      reader.readAsDataURL(file);
+    }
+  </script>
+</body>
+</html>
