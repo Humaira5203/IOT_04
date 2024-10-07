@@ -7,68 +7,144 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      background-color: #e6f0fa;
       margin: 0;
       padding: 20px;
-    }
-    h1 {
-      font-size: 2em;
-      margin-bottom : 10px;
-    }
-    p {
-      margin: 5px 0 20px;
-    }
-    .device-container {
       display: flex;
       flex-direction: column;
       align-items: center;
     }
+
+    /* Welcome message */
+    .dashboard-message {
+      font-size: 2em;
+      color: #001a66;
+      font-weight: bold;
+      margin-bottom: 20px; /* Added space between the welcome and the device list */
+      text-align: center; /* Aligning it to center */
+    }
+
+    /* Device List header */
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px; /* Reduced margin */
+      text-align: center;
+      color: #001a66;
+    }
+
+    /* Subtitle for Device List */
+    h2 {
+      color: #002699;
+      font-weight: normal;
+      margin-top: 0; /* Removed extra margin */
+      text-align: center;
+    }
+
+    /* Flexbox for device list, horizontally aligned */
+    .device-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
     .device-box {
-      border: 1px solid #000;
+      width: 250px;
+      padding: 20px;
+      border-radius: 15px;
+      background-color: #5dade2;
+      color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+      text-align: center;
+    }
+
+    .device-box:hover {
+      transform: scale(1.05);
+    }
+
+    .device-box h3 {
+      font-size: 1.3em;
+      margin-bottom: 10px;
+    }
+
+    .status-toggle {
+      margin-bottom: 20px;
+    }
+
+    .device-info {
+      background-color: #001a66;
       padding: 10px;
-      margin: 10px;
-      border-radius: 5px;
-      width : 300px;
-      display: inline-block;
-      color: white;
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+      text-align: center;
+      transition: background-color 0.3s ease;
     }
-    .status-on {
-      background-color: green;
+
+    .device-info:hover {
+      background-color: #0033cc;
     }
-    .status-off {
-      background-color: red;
+
+    .device-details {
+      display: none;
+      background-color: #f9f9f9;
+      color: #000;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
     }
+
+    /* Add device button below devices */
     #add-device-btn {
       display: block;
-      margin: 20px 0;
-      padding: 10px 20px;
-      border: 2px solid #000;
-      border-radius: 5px;
-      background: none;
+      width: 200px;
+      padding: 10px 25px;
+      margin: 40px auto 0;
+      border: none;
+      border-radius: 20px;
+      background-color: #007bff;
+      color: white;
       cursor: pointer;
       font-size: 1em;
-      transition: background-color 0.3s, color 0.3s;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       text-align: center;
+      transition: background-color 0.3s ease;
       text-decoration: none;
     }
+
     #add-device-btn:hover {
-      background-color: maroon;
-      color: white;
+      background-color: #0056b3;
+    }
+
+    .add-icon {
+      margin-right: 5px;
     }
   </style>
 </head>
 <body>
-  <h1>Dashboard</h1>
-  <p>Welcome to the dashboard!</p>
-  
-  <div id="devices">
+  <!-- Welcome message -->
+  <div class="dashboard-message">Welcome to Dashboard!</div>
+
+  <!-- Device List header below welcome message -->
+  <h1>Device List</h1>
+  <h2>Manage all IOT devices in one place</h2>
+
+  <!-- Device list container -->
+  <div class="device-container">
     <% devices.forEach(device => { %>
-      <div class="device-container">
-        <div class="device-box <%= device.status === 'on' ? 'status-on' : 'status-off' %>">
-          <p><strong>Device Name:</strong> <%= device.device_name %></p>
+      <div class="device-box">
+        <h3>Device Name: <%= device.device_name %></h3>
+        <div class="status-toggle">
+          <input type="checkbox" <%= device.status === 'on' ? 'checked' : '' %> />
+        </div>
+        <div class="device-info" onclick="toggleDetails('<%= device.device_name %>')">
+          <span>Device Information</span>
+        </div>
+
+        <!-- Hidden device details, to be shown when clicked -->
+        <div class="device-details" id="details-<%= device.device_name %>">
           <p><strong>Status:</strong> <%= device.status %></p>
           <p><strong>Last Active:</strong> <%= device.lastActive %></p>
           <p><strong>Active Duration:</strong> <%= device.activeDuration %></p>
@@ -77,7 +153,22 @@
       </div>
     <% }); %>
   </div>
-  
-  <a href="/add-device" id="add-device-btn">Add device</a>
+
+  <!-- Add device button -->
+  <a href="/add-device" id="add-device-btn">
+    <span class="add-icon">+</span> Add Device
+  </a>
+
+  <script>
+    // Function to toggle device details visibility
+    function toggleDetails(deviceName) {
+      const detailsElement = document.getElementById('details-' + deviceName);
+      if (detailsElement.style.display === 'block') {
+        detailsElement.style.display = 'none';
+      } else {
+        detailsElement.style.display = 'block';
+      }
+    }
+  </script>
 </body>
 </html>

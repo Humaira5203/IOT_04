@@ -1,19 +1,101 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Register</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #b3e5fc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .register-box {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            width: 320px; /* Reduced width */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .register-box h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .register-box label {
+            font-size: 14px;
+            color: #333;
+            display: block;
+            text-align: left;
+            margin-bottom: 5px;
+        }
+
+        .register-box input[type="email"], 
+        .register-box input[type="password"] {
+            width: 90%; /* Reduced width of input fields */
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .register-box button {
+            background-color: #00aaff; /* Sky blue color for Register button */
+            color: white;
+            padding: 10px;
+            width: 90%; /* Matching width with input boxes */
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .register-box button:hover {
+            background-color: #008fcc;
+        }
+
+        .register-box a {
+            font-size: 12px;
+            color: #000; /* Black color for link */
+            display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
+        }
+
+        .register-box a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-  <h1>Register</h1>
-  <form action="/register" method="post">
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required><br><br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required><br><br>
-    <label for="confirmPassword">Confirm Password:</label>
-    <input type="password" id="confirmPassword" name="confirmPassword" required><br><br>
-    <button type="submit">Register</button>
-  </form>
-  <p>Already have an account? <a href="/login">Login here</a></p>
+    <div class="register-box">
+        <h1>Register</h1>
+        <form action="/register" method="post">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+            <button type="submit">Register</button>
+        </form>
+        <a href="/login">Already have an account? Login here</a>
+    </div>
 </body>
 </html>

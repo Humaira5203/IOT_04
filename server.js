@@ -15,17 +15,17 @@ const mqtt_password = 'Test1234';
 
 // Create Express app
 const app = express();
-let port = 4001; // Initial port
+let port = 4001;
 
 // Use middlewares
 app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); // For form data
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Set view engine to EJS
 app.set('view engine', 'ejs');
 
-// Set up storage engine for multer
+// Set up storage engine for multer (for image upload)
 const storage = multer.diskStorage({
   destination: './uploads/',
   filename: function (req, file, cb) {
@@ -92,8 +92,8 @@ client.on('error', (err) => {
 // Create connection to MySQL database
 const db = mysql.createConnection({
   host: 'localhost',
-  user: 'root', // use your MySQL username
-  password: 'eren23', // use your MySQL password
+  user: 'root',
+  password: 'eren23',
   database: 'flutter_auth'
 });
 
@@ -152,21 +152,13 @@ setInterval(() => {
   const currentTime = Date.now();
   for (const mac in lastMessageTime) {
     if ((currentTime - lastMessageTime[mac]) > 30000) { // If the device has been inactive for more than 30 seconds
-      // Query to update the device status to 'off' and set the last_update timestamp to the current time
       const sqlUpdateOff = 'UPDATE devices SET status = ?, last_update = NOW() WHERE device_name = ?';
-      
-      // Execute the query
       db.query(sqlUpdateOff, ['off', mac], (err, updateResult) => {
         if (err) {
-          // Log an error message if the query fails
           console.error('Failed to update status to off:', err);
-          return; // Exit the function to avoid further processing
+          return;
         }
-        
-        // Log a success message indicating the device status was set to 'off'
         console.log(`Status set to off for device: ${mac} due to inactivity`);
-
-        // Remove the device from the lastMessageTime object to stop tracking its inactivity
         delete lastMessageTime[mac];
       });
     }
@@ -204,6 +196,61 @@ function formatDuration(seconds) {
   const secs = seconds % 60;
   return `${hours}h ${minutes}m ${secs}s`;
 }
+
+// Render add-device page with two buttons
+app.get('/add-device', (req, res) => {
+  res.render('add-device');  // Ensure you have an `add-device.ejs` in the views folder
+});
+
+// Route for QR code scanning and upload-capture
+app.get('/upload-capture', (req, res) => {
+  res.render('upload-capture'); // Serve the QR code upload page
+});
+
+app.get('/qr-scanner', (req, res) => {
+  res.render('qr-scanner'); // Render the QR scanner
+});
+
+// Render certificate management page
+app.get('/create-certificate', (req, res) => {
+  res.render('create'); // Render certificate management
+});
+
+// Route for managing certificates (Create, Delete, Download)
+app.post('/manage-certificates', (req, res) => {
+  const { action, deviceId } = req.body;
+
+  if (action === 'create') {
+    console.log(`Creating certificate for device ID: ${deviceId}`);
+    // Logic to create certificate
+    res.send(`Certificate created for device ID: ${deviceId}`);
+  } else if (action === 'delete') {
+    console.log(`Deleting certificate for device ID: ${deviceId}`);
+    // Logic to delete certificate
+    res.send(`Certificate deleted for device ID: ${deviceId}`);
+  } else if (action === 'download') {
+    console.log(`Downloading certificate for device ID: ${deviceId}`);
+    // Logic to download certificate
+    res.send(`Certificate downloaded for device ID: ${deviceId}`);
+  } else {
+    res.status(400).send('Invalid action');
+  }
+});
+
+// Handle image upload
+app.post('/upload-image', (req, res) => {
+  upload(req, res, (err) => {
+    if (err) {
+      res.send('Error uploading file.');
+    } else {
+      if (req.file == undefined) {
+        res.send('No file selected.');
+      } else {
+        res.send(`File uploaded successfully: <a href="/qr-scanner">Go to QR Code Scanner</a>`);
+      }
+    }
+  });
+});
 
 // Register user
 app.post('/register', (req, res) => {
@@ -271,36 +318,6 @@ app.get('/register', (req, res) => {
   res.render('register');
 });
 
-// Render add-device page
-app.get('/add-device', (req, res) => {
-  res.render('add-device');
-});
-
-// Render upload-capture page
-app.get('/upload-capture', (req, res) => {
-  res.render('upload-capture');
-});
-
-// Endpoint to handle image upload
-app.post('/upload-image', (req, res) => {
-  upload(req, res, (err) => {
-    if (err) {
-      res.send('Error uploading file.');
-    } else {
-      if (req.file == undefined) {
-        res.send('No file selected.');
-      } else {
-        res.send(`File uploaded successfully: <a href="/qr-scanner">Go to QR Code Scanner</a>`);
-      }
-    }
-  });
-});
-
-// Render QR Code Scanner page
-app.get('/qr-scanner', (req, res) => {
-  res.render('qr-scanner');
-});
-
 // Start Express server
 let server;
 function startServer() {
@@ -321,4 +338,3 @@ function startServer() {
 }
 
 startServer();
-

@@ -7,96 +7,108 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      height : 100vh;
+      align-items: center;
+      height: 100vh;
       margin: 0;
     }
+
     .hollow-box {
-      border: 2px solid #000;
+      background-color: #ffffff;
       border-radius: 10px;
-      padding: 20px;
+      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+      width: 400px;
+      padding: 30px;
       text-align: center;
-      width : 500px;
     }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333333;
+    }
+
     .form-container {
       display: flex;
       flex-direction: column;
       align-items: center;
     }
+
     .form-group {
-      margin-bottom : 15px;
-      display: flex;
-      align-items: center;
+      margin-bottom: 20px;
     }
+
     .form-group label {
+      background-color: #007bff;
+      color: white;
       padding: 10px 20px;
-      border: 2px solid #000;
+      border: none;
       border-radius: 5px;
       cursor: pointer;
-      margin-right : 10px;
+      transition: background-color 0.3s ease;
     }
+
+    .form-group label:hover {
+      background-color: #0056b3;
+    }
+
     .form-group input[type="radio"] {
-      margin-right : 10px;
+      margin-right: 10px;
     }
+
     .form-group input[type="file"] {
       display: none;
     }
+
     .form-group #imgInp + label {
-      background-color: navy;
+      background-color: #007bff;
       color: white;
     }
+
     .form-group #imgInp + label:hover {
-      background-color: darkblue;
-    }
-    img {
-      margin-top : 20px;
-      max-width : 200px;
-      height : auto;
-      display: none;
-      margin-bottom : 10px;
-    }
-    .upload-button {
-      margin-top : 10px;
-      padding: 10px 20px;
-      border: 2px solid #000;
-      border-radius: 5px;
-      background-color: #007BFF;
-      color: white;
-      cursor: pointer;
-    }
-    .upload-button:hover {
       background-color: #0056b3;
     }
+
+    img {
+      margin-top: 20px;
+      max-width: 100%;
+      height: auto;
+      display: none;
+      margin-bottom: 10px;
+    }
+
+    .upload-button, .capture-button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .upload-button:hover, .capture-button:hover {
+      background-color: #0056b3;
+    }
+
     #video-container {
       display: none;
       flex-direction: column;
       align-items: center;
+      margin-top: 20px;
     }
+
     video {
-      max-width : 300px;
-      height : auto;
-      border: 2px solid #000;
+      max-width: 100%;
       border-radius: 5px;
-    }
-    .capture-button {
-      margin-top : 10px;
-      padding: 10px 20px;
-      border: 2px solid #000;
-      border-radius: 5px;
-      background-color: #007BFF;
-      color: white;
-      cursor: pointer;
-    }
-    .capture-button:hover {
-      background-color: #0056b3;
+      border: 1px solid #ccc;
     }
   </style>
 </head>
 <body>
   <div class="hollow-box">
+    <h2>Upload / Capture Image</h2>
     <div class="form-container">
       <form id="image-form" action="/upload-image" method="post" enctype="multipart/form-data">
         <div class="form-group">
@@ -105,7 +117,7 @@
           <input type="radio" id="capture-image" name="image-option" value="capture">
           <label for="capture-image">Capture Image</label>
         </div>
-        <div class="form-group upload-group" style="flex-direction: column;">
+        <div class="form-group upload-group">
           <input accept="image/*" type="file" id="imgInp" name="file">
           <label for="imgInp">Choose File</label>
         </div>
@@ -115,13 +127,11 @@
         </div>
         <img id="blah" src="#" alt="your image" />
         
-        <!-- Updated Upload Button -->
         <button type="button" class="upload-button" id="upload-btn">Upload</button>
       </form>
     </div>
   </div>
 
-  <!-- Include jsQR library -->
   <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.min.js"></script>
 
   <script>
@@ -138,11 +148,9 @@
       if (file) {
         blah.src = URL.createObjectURL(file);
         blah.style.display = 'block';
-        fileChosen.textContent = file.name;
         readQRCodeFromImage(file);
       } else {
         blah.style.display = 'none';
-        fileChosen.textContent = 'No file chosen';
       }
     };
 
@@ -205,19 +213,19 @@
           const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
           const qrCode = jsQR(imageData.data, canvas.width, canvas.height);
           if (qrCode) {
-            alert("QR Code Data: " + qrCode.data);
+            console.log("QR Code detected");
           } else {
-            alert("No QR code found.");
+            console.log("No QR code found.");
           }
         };
       };
       reader.readAsDataURL(file);
     }
 
-    // Modified Upload Button Script
     const uploadBtn = document.getElementById('upload-btn');
     uploadBtn.addEventListener('click', (e) => {
       e.preventDefault();
+      // Display a success message instead of showing QR code data
       alert('File uploaded successfully!');
       window.location.href = '/qr-scanner'; // Redirect to the QR Code Scanner page
     });

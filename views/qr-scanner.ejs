@@ -7,43 +7,49 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      height : 100vh;
+      align-items: center;
+      height: 100vh;
       margin: 0;
     }
     .hollow-box {
-      border: 2px solid #000;
+      background-color: #ffffff;
       border-radius: 10px;
-      padding: 20px;
+      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+      width: 400px;
+      padding: 30px;
       text-align: center;
-      width : 500px;
+      transition: transform 0.3s ease;
     }
-    .form-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    .hollow-box:hover {
+      transform: scale(1.02);
+    }
+    h2 {
+      color: #333333;
+      margin-bottom: 20px;
     }
     .upload-button {
-      margin-top : 10px;
+      margin-top: 10px;
       padding: 10px 20px;
-      border: 2px solid #000;
+      border: none;
       border-radius: 5px;
       background-color: #007BFF;
       color: white;
       cursor: pointer;
-      display: inline-block;
+      transition: background-color 0.3s ease;
     }
     .upload-button:hover {
       background-color: #0056b3;
     }
     #qrInp {
-      display: none; /* Hide the default file input */
+      display: none;
     }
     #qr-file-chosen {
-      margin-top : 10px;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #666;
     }
   </style>
 </head>
@@ -62,22 +68,12 @@
     const qrInp = document.getElementById('qrInp');
     const qrFileChosen = document.getElementById('qr-file-chosen');
 
-    // Check if the file was passed from the upload page
-    const urlParams = new URLSearchParams(window.location.search);
-    const uploadedFile = urlParams.get('file');
-
-    if (uploadedFile) {
-      qrFileChosen.textContent = uploadedFile;
-      qrInp.value = `/uploads/${uploadedFile}`; // Pre-fill the input with the uploaded file path
-
-      // Automatically read the QR code
-      readQRCodeFromImage(`/uploads/${uploadedFile}`);
-    }
-
     qrInp.onchange = function(evt) {
       const [file] = qrInp.files;
       if (file) {
         qrFileChosen.textContent = file.name;
+
+        // Read the QR code from the image
         readQRCodeFromImage(file);
       } else {
         qrFileChosen.textContent = 'No file chosen';

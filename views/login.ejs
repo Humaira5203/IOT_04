@@ -6,78 +6,91 @@
     <title>Login</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            background-color: #b3e5fc;
             display: flex;
             justify-content: center;
             align-items: center;
-            height : 100vh;
+            height: 100vh;
             margin: 0;
         }
-        .login-container {
-            text-align: center;
-            border: 2px solid #000;
+
+        .login-box {
+            background-color: white;
             border-radius: 10px;
             padding: 30px;
-            width : 300px;
-            background-color: #fff;
+            width: 320px; /* Reduced width */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
         }
-        .login-container h1 {
-            font-size: 2em;
-            margin-bottom : 20px;
+
+        .login-box h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: bold;
         }
-        .login-container form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+
+        .login-box label {
+            font-size: 14px;
+            color: #333;
+            display: block;
+            text-align: left;
+            margin-bottom: 5px;
         }
-        .login-container form label {
-            margin-bottom : 5px;
-            width : 100%;
-            text-align : left;
-        }
-        .login-container form input[type="email"],
-        .login-container form input[type="password"] {
-            width : 100%;
+
+        .login-box input[type="email"], 
+        .login-box input[type="password"] {
+            width: 90%; /* Reduced width of input fields */
             padding: 10px;
-            margin-bottom : 10px;
-            border: 1px solid #ccc;
+            margin-bottom: 15px;
             border-radius: 5px;
-            box-sizing: border-box;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
-        .login-container form input[type="submit"] {
-            padding: 10px 20px;
-            background-color: #007BFF;
+
+        .login-box button {
+            background-color: #00aaff; /* Sky blue color */
             color: white;
+            padding: 10px;
+            width: 90%; /* Matching width with input boxes */
             border: none;
             border-radius: 5px;
+            font-size: 14px;
             cursor: pointer;
-            width : 100%;
         }
-        .login-container form input[type="submit"]:hover {
-            background-color: #0056b3;
+
+        .login-box button:hover {
+            background-color: #008fcc;
         }
-        .login-container a {
-            color: #007BFF;
-            text-decoration: none;
-            margin-top : 10px;
+
+        .login-box a {
+            font-size: 12px;
+            color: #000; /* Black color for link */
             display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
         }
-        .login-container a:hover {
+
+        .login-box a:hover {
             text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
+    <div class="login-box">
         <h1>Login</h1>
         <form action="/login" method="post">
-            <label for="email">Email:</label>
+            <label for="email">Email :</label>
             <input type="email" id="email" name="email" required>
 
-            <label for="password">Password:</label>
+            <label for="password">Password :</label>
             <input type="password" id="password" name="password" required>
 
-            <input type="submit" value="Login">
+            <button type="submit">Login</button>
         </form>
         <a href="/register">Don't have an account? Register here</a>
     </div>
